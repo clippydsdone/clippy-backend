@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/clippydsdone/clippy-backend/issues"
   },
-  "homepage": "https://github.com/clippydsdone/clippy-backend#readme"
+  "homepage": "https://github.com/clippydsdone/clippy-backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

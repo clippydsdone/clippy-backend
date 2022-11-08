@@ -11,7 +11,7 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 
 ## Branching Strategy
 
-There are only 2 long-standing (remote) branches:
+There are only 2 long-standing (remote) branches:   
 
 1. **dev**: Contains all the code in the current SCRUM iteration.
 2. **main**: Contains the release for the previous SCRUM iteration.

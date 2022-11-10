@@ -20,15 +20,25 @@
  const title = 'A Bacterial Foraging Based Smart Offloading for IoT Sensors in Edge Computing'; //example title according to the
  const fields = 'references,citations'; //fields to return to use on graph
  
- let getReq = baseURLSemantic + '/graph/v1/paper';
+ //let getReq = baseURLSemantic + '/graph/v1/paper';
  
  //this is the route of the web
  const option = index.slice(20);
  //console.log(option);
  switch(option){
      case '/search-title':
-         getReq += '/search?query=' + title;
-         https.get(getReq, (response) => {
+        searchPaperbyTitle(title);
+        break;
+
+    case '/search-paper-ID':
+        searchPaperbyId(paperID);
+        break;
+}
+ 
+// function that searches for a paper by title
+function searchPaperbyTitle (title){
+    const getReq = baseURLSemantic + '/graph/v1/paper/search?query=' + title;
+        https.get(getReq, (response) => {
             let data = ''; //will be a list of titles and ID
             response.on('data', (chunk) => {
                  data += chunk;
@@ -50,7 +60,7 @@
                         //console.log(docs[i].title);
                         if (title.localeCompare(docs[i].title) === 0){ //if it is exactly the title searched, return the paperID
                             console.log(docs[i].title);
-                            paperID = docs[i].paperId;
+                            //paperID = docs[i].paperId;
                             searchPaperbyId(docs[i].paperId);
                             founded = true;
                         }
@@ -64,18 +74,13 @@
             })
         });
  
-        break;
-
-    case '/search-paper-ID':
-        searchPaperbyId(paperID);
-        break;
 }
- 
+
 
 
 // function that search a paper by ID and returns its references and citation or error if not found
  function searchPaperbyId(paperID){
-    getReq = baseURLSemantic + '/graph/v1/paper/' + paperID;
+    const getReq = baseURLSemantic + '/graph/v1/paper/' + paperID;
     https.get(getReq + '?fields=' + fields, (response) => {
         let data = '';
         response.on('data', (chunk) => {

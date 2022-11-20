@@ -17,11 +17,33 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.get('/semantic/paper/:id', async (req, res) => {
+app.get('/semantic/paper/id/:id', async (req, res) => {
   var paperId = req.params.id;
   var result = await SemanticScholarApi.searchPaperById(paperId);
   res.status(result.status);
   res.send(result.data);
+});
+
+app.get('/semantic/paper/search', async (req, res) => {
+  var query = req.body.query;
+  var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+  var paperId = response.data[0].paperId;
+  var result = await SemanticScholarApi.searchPaperById(paperId);
+  res.status(result.status);
+  res.send(result.data);
+});
+
+app.get('/semantic/paper/search_multiple', async (req, res) => {
+  var query = req.body.query;
+  var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+
+  var results = []; 
+  for(var i = 0; i < response.data.length; i++) {
+    var curr = await SemanticScholarApi.searchPaperById(response.data[i].paperId);
+    results.push(curr);
+  }
+  results.data = results;
+  res.send(results.data);
 });
 
 // TODO: Summarize from all avilable models
@@ -29,18 +51,14 @@ app.post('/summarize/all', async (req, res) => {
   res.send();
 });
 
-app.post('/summarize/huggingFace', async (req, res) => {
-  var options = {
-    args: req.body.text
-  };
+// app.post('/summarize/huggingFace', async (req, res) => {
+//   var options = {
+//     args: req.body.text
+//   };
 
-  PythonShell.run('./models/facebook/bart-large-cnn.py', options, function (err, results) {
-    if (err) throw err;
-    res.send(results[0]);
-  })
-});
-
-  // var result = await HuggingFaceApi.modelOutput(req.body.model, req.body.text);
-  // res.status(result.status);
-  // res.send(result.data);
+//   PythonShell.run('./models/facebook/bart-large-cnn.py', options, function (err, results) {
+//     if (err) throw err;
+//     res.send(results[0]);
+//   })
+// });
 

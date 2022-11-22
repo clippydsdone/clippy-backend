@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const PythonShell = require('python-shell').PythonShell;
 
 const app = express()
 const PORT = process.env.PORT || 5000;
 
 const SemanticScholarApi = require('./integrations/semanticScholar.js');
 const HuggingFaceApi = require('./integrations/huggingFace.js');
+const D3proxy = require('./proxy/d3proxy.js');
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 app.get('/semantic/paper/id/:id', async (req, res) => {
   var paperId = req.params.id;
   var result = await SemanticScholarApi.searchPaperById(paperId);
+  result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
   res.status(result.status);
   res.send(result.data);
 });
@@ -29,6 +30,7 @@ app.get('/semantic/paper/search', async (req, res) => {
   var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
   var paperId = response.data[0].paperId;
   var result = await SemanticScholarApi.searchPaperById(paperId);
+  result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
   res.status(result.status);
   res.send(result.data);
 });
@@ -45,20 +47,3 @@ app.get('/semantic/paper/search_multiple', async (req, res) => {
   results.data = results;
   res.send(results.data);
 });
-
-// TODO: Summarize from all avilable models
-app.post('/summarize/all', async (req, res) => {
-  res.send();
-});
-
-// app.post('/summarize/huggingFace', async (req, res) => {
-//   var options = {
-//     args: req.body.text
-//   };
-
-//   PythonShell.run('./models/facebook/bart-large-cnn.py', options, function (err, results) {
-//     if (err) throw err;
-//     res.send(results[0]);
-//   })
-// });
-

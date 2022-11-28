@@ -25,7 +25,7 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
   res.send(result.data);
 });
 
-app.get('/semantic/paper/search', async (req, res) => {
+app.post('/semantic/paper/search', async (req, res) => {
   var query = req.body.query;
   var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
   var paperId = response.data[0].paperId;
@@ -35,7 +35,7 @@ app.get('/semantic/paper/search', async (req, res) => {
   res.send(result.data);
 });
 
-app.get('/semantic/paper/search_multiple', async (req, res) => {
+app.post('/semantic/paper/search_multiple', async (req, res) => {
   var query = req.body.query;
   var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
 

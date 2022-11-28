@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -8,9 +8,9 @@ const SemanticScholarApi = require('./integrations/semanticScholar.js');
 const HuggingFaceApi = require('./integrations/huggingFace.js');
 const D3proxy = require('./proxy/d3proxy.js');
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
+app.use(cors());
+app.use(express.json());
+app.options('*', cors());
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
@@ -33,7 +33,6 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
 
 app.post('/semantic/paper/search', async (req, res) => {
   try {
-    console.log(req);
     var query = req.body.query;
     var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
     var paperId = response.data[0].paperId;

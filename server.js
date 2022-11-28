@@ -33,6 +33,7 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
 
 app.post('/semantic/paper/search', async (req, res) => {
   try {
+    console.log(req);
     var query = req.body.query;
     var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
     var paperId = response.data[0].paperId;

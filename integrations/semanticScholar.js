@@ -20,7 +20,7 @@ async function searchPaperById(paperId) {
     return result;
 };
 exports.searchPaperById = searchPaperById
-
+    
 async function searchPaperIdByKeywoard(query) {
     const getReq = baseURLSemantic + '/graph/v1/paper/search/';
     var result = { "status": 200, "data": null }

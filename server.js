@@ -31,9 +31,11 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
     var result = await SemanticScholarApi.searchPaperById(paperId);
     result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
     res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
     res.send(result.data);
   }
   catch (e) {
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({ "err": e });
   }
 });
@@ -46,9 +48,11 @@ app.post('/semantic/paper/search', async (req, res) => {
     var result = await SemanticScholarApi.searchPaperById(paperId);
     result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
     res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
     res.send(result.data);
   }
   catch (e) {
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({ "err": e });
   }
 });
@@ -64,9 +68,11 @@ app.post('/semantic/paper/search_multiple', async (req, res) => {
       results.push(curr);
     }
     results.data = results;
+    res.header("Access-Control-Allow-Origin", "*");
     res.send(results.data);
   }
   catch (e) {
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({ "err": e });
   }
 });

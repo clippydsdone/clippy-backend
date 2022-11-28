@@ -8,6 +8,13 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 - Git for version control.
 - [Zenhub](https://app.zenhub.com/workspaces/clippy-63600767a63c240a624ccea7/board) in addition to GitHub board for tracking work items and SCRUM organisation.
 - [SonarCloud](https://sonarcloud.io/project/overview?id=clippydsdone_clippy-backend) for code quality check.
+- [NodeJS](https://nodejs.org/en/) is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+- [Axios](https://axios-http.com/docs/intro) a promise-based HTTP Client for node.js and the browser.
+- [Neo4J](https://neo4j.com/developer/graph-database/) is an open-source, NoSQL, native graph database that provides an ACID-compliant transactional backend for your applications.
+
+## External Services (APIs)
+- [Semantic Scholar](https://www.semanticscholar.org/about) provide records for research papers published in all fields provided as an easy-to-use JSON archive.
+- [Hugging Face]() a community and data science platform that provides: tools that enable users to build, train and deploy ML (Machine Learning) models based on open source (OS) code and technologies, as well as a place where a broad community of data scientists, researchers, and ML engineers can come together and share ideas, get support and contribute to open source projects.
 
 ## Branching Strategy
 
@@ -31,8 +38,4 @@ When issues are closed temporary branches are **squashed and deleted**.
       R --> M[main];
 ```
 
-## CI/CD
-
 ## GitFlow
-
-## 

@@ -14,6 +14,7 @@ async function searchPaperById(paperId) {
     })
         .then((response) => result.data = response.data)
         .catch((err) => {
+            console.log(err);
             result.status = err.response.status;
             result.data = err.message;
         });
@@ -34,6 +35,7 @@ async function searchPaperIdByKeywoard(query) {
             result.data = response.data.data
         })
         .catch((err) => {
+            console.log(err);
             result.status = err.response.status;
             result.data = err.message;
         });

@@ -5,7 +5,6 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 
 const SemanticScholarApi = require('./integrations/semanticScholar.js');
-const HuggingFaceApi = require('./integrations/huggingFace.js');
 const D3proxy = require('./proxy/d3proxy.js');
 
 app.use(express.json());

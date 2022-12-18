@@ -3,12 +3,20 @@ on:
   push:
     branches:
       - dev
+      - feature/*
+      - bugfix/*
   pull_request:
     types: [opened, synchronize, reopened, edited]
 concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
   cancel-in-progress: true
 jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Jest
+        uses: stefanoeb/jest-action@1.0.4
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest

@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Running Tests
+    runs-on: ubuntu-latest  
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 14.x
@@ -25,7 +26,7 @@ jobs:
 
   sonarcloud:
     needs: build
-    name: SonarCloud
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

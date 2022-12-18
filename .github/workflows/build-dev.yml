@@ -18,6 +18,7 @@ jobs:
       - name: Run Jest
         uses: stefanoeb/jest-action@1.0.4
   sonarcloud:
+    needs: tests
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:

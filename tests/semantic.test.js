@@ -5,7 +5,7 @@ jest.setTimeout(30 * 1000);
 describe('Semantic Scholar API testing', () => {
     test('Semantic Scholar By ID: Paper is null', async () => {
         const result = await SemanticScholarApi.searchPaperById(null);
-        expect(result.status).toBe(400);
+        expect(result.status).toBe(404);
         expect.stringContaining("Request failed");
     });
 

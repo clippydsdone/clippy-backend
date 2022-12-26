@@ -30,7 +30,7 @@ describe('Semantic Scholar API testing', () => {
 
     test('Semantic Scholar Serach: Serach paper title null', async () => {
         const result = await SemanticScholarApi.searchPaperIdByKeywoard(null);
-        expect(result.status).toBe(400);
+        expect(result.status).toBe(404);
         expect.stringContaining("Request failed");
     });
 

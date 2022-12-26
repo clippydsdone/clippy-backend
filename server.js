@@ -37,7 +37,7 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });
 
@@ -54,7 +54,7 @@ app.post('/semantic/paper/search', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });
 
@@ -74,6 +74,6 @@ app.post('/semantic/paper/search_multiple', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });

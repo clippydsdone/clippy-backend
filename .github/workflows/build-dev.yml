@@ -3,14 +3,30 @@ on:
   push:
     branches:
       - dev
+      - feature/*
+      - bugfix/*
   pull_request:
     types: [opened, synchronize, reopened, edited]
 concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
   cancel-in-progress: true
 jobs:
+  build:
+    name: Running Tests
+    runs-on: ubuntu-latest  
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run tests
+
   sonarcloud:
-    name: SonarCloud
+    needs: build
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
-  build:
+  deploy:
     needs: sonarcloud
     name: Heroku Deployement
     runs-on: ubuntu-latest

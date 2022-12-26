@@ -1,11 +1,10 @@
 const axios = require('axios');
 
 const baseURLSemantic = 'https://api.semanticscholar.org';
-const fields = 'title,references,tldr';
 
-async function searchPaperById(paperId) {
+async function searchPaperById(paperId, fields = "title,references,paperId,externalIds,url,title,abstract,venue,year,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationVenue,publicationTypes,publicationDate,journal,citationStyles,authors,tldr") {
     const getReq = baseURLSemantic + '/graph/v1/paper/' + paperId;
-    var result = { "status": 200, "data": null }
+    var result = { "status": 200, "data": null, "fields": fields }
     await axios({
         method: 'get',
         url: getReq,
@@ -20,13 +19,13 @@ async function searchPaperById(paperId) {
     return result;
 };
 exports.searchPaperById = searchPaperById
-    
-async function searchPaperIdByKeywoard(query) {
+
+async function searchPaperIdByKeywoard(query, fields ="title,paperId") {
     const getReq = baseURLSemantic + '/graph/v1/paper/search/';
     var result = { "status": 200, "data": null }
     await axios({
         method: 'get',
-        params: { "query": query },
+        params: { "query": query, "fields": fields },
         headers: { 'x-api-key': process.env.SEMANTIC_SCHOLAR_API_KEY },
         url: getReq
     })

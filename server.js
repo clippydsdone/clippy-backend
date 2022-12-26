@@ -5,7 +5,6 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 
 const SemanticScholarApi = require('./integrations/semanticScholar.js');
-const HuggingFaceApi = require('./integrations/huggingFace.js');
 const D3proxy = require('./proxy/d3proxy.js');
 
 app.use(express.json());
@@ -29,8 +28,8 @@ app.get('/', (req, res) => {
 
 app.get('/semantic/paper/id/:id', async (req, res) => {
   try {
-    var paperId = req.params.id;
-    var result = await SemanticScholarApi.searchPaperById(paperId);
+    const paperId = req.params.id;
+    const result = await SemanticScholarApi.searchPaperById(paperId);
     result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
     res.status(result.status);
     res.header("Access-Control-Allow-Origin", "*");
@@ -38,16 +37,16 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });
 
 app.post('/semantic/paper/search', async (req, res) => {
   try {
-    var query = req.body.query;
-    var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
-    var paperId = response.data[0].paperId;
-    var result = await SemanticScholarApi.searchPaperById(paperId);
+    const query = req.body.query;
+    const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+    const paperId = response.data[0].paperId;
+    const result = await SemanticScholarApi.searchPaperById(paperId);
     result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
     res.status(result.status);
     res.header("Access-Control-Allow-Origin", "*");
@@ -55,7 +54,7 @@ app.post('/semantic/paper/search', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });
 
@@ -75,6 +74,6 @@ app.post('/semantic/paper/search_multiple', async (req, res) => {
   }
   catch (e) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.send({ "err": e });
+    res.send({ "err": e }, 404);
   }
 });

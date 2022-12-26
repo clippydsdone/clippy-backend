@@ -20,7 +20,7 @@ async function searchPaperById(paperId, fields = "title,references,paperId,exter
 };
 exports.searchPaperById = searchPaperById
 
-async function searchPaperIdByKeywoard(query, fields = "title,references,paperId,externalIds,url,title,abstract,venue,year,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationVenue,publicationTypes,publicationDate,journal,citationStyles,authors,tldr") {
+async function searchPaperIdByKeywoard(query, fields ="title,paperId") {
     const getReq = baseURLSemantic + '/graph/v1/paper/search/';
     var result = { "status": 200, "data": null }
     await axios({

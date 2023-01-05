@@ -16,7 +16,7 @@ async function searchPaperById(paperId, fields = "paperId,externalIds,url,title,
             console.log(err);
             result.status = err.response.status;
             result.data = err.message;
-        });
+    });
     return result;
 };
 exports.searchPaperById = searchPaperById

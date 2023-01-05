@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -41,6 +42,41 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
   }
 });
 
+app.post('/semantic/paper/base64', async (req, res) => {
+  const query = req.body.query;
+  const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+  const paperId = response.data[0].paperId;
+  const result = await SemanticScholarApi.searchPaperById(paperId);
+  const url = result.data.openAccessPdf.url;
+  console.log(url);
+
+  try {
+    await axios({
+      method: 'get',
+      url: url,
+      responseType: 'arraybuffer'
+    })
+      .then((response) => {
+        console.log("parsing");
+        result.data = Buffer.from(response.data, 'binary').toString('base64')
+        console.log("parsing");
+      })
+      .catch((err) => {
+        console.log(err);
+        result.status = err.response.status;
+        result.data = err.message;
+      });
+      res.status(result.status);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(result.data);
+  }
+  catch (e) {
+    console.log(e);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send({ "err": e }, 404);
+  }
+});
+
 app.post('/semantic/paper/search', async (req, res) => {
   try {
     const query = req.body.query;
@@ -77,3 +113,5 @@ app.post('/semantic/paper/search_multiple', async (req, res) => {
     res.send({ "err": e }, 404);
   }
 });
+
+

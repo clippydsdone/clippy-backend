@@ -13,7 +13,6 @@ async function searchPaperById(paperId, fields = "paperId,externalIds,url,title,
     })
         .then((response) => result.data = response.data)
         .catch((err) => {
-            console.log(err);
             result.status = err.response.status;
             result.data = err.message;
     });

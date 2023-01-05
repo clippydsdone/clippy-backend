@@ -6,7 +6,9 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 
 const SemanticScholarApi = require('./integrations/semanticScholar.js');
+const PdfStringify = require('./integrations/pdfStringify.js');
 const D3proxy = require('./proxy/d3proxy.js');
+
 
 app.use(express.json());
 
@@ -43,32 +45,21 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
 });
 
 app.post('/semantic/paper/base64', async (req, res) => {
-  const query = req.body.query;
-  const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
-  const paperId = response.data[0].paperId;
-  const result = await SemanticScholarApi.searchPaperById(paperId);
-  const url = result.data.openAccessPdf.url;
-  console.log(url);
-
   try {
-    await axios({
-      method: 'get',
-      url: url,
-      responseType: 'arraybuffer'
-    })
-      .then((response) => {
-        console.log("parsing");
-        result.data = Buffer.from(response.data, 'binary').toString('base64')
-        console.log("parsing");
-      })
-      .catch((err) => {
-        console.log(err);
-        result.status = err.response.status;
-        result.data = err.message;
-      });
-      res.status(result.status);
-      res.header("Access-Control-Allow-Origin", "*");
-      res.send(result.data);
+    const query = req.body.query;
+    const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+    const paperId = response.data[0].paperId;
+    let result = await SemanticScholarApi.searchPaperById(paperId);
+
+    if (result.data.isOpenAccess == false) {
+      throw "PDF document is not publicly available."
+    }
+
+    const url = result.data.openAccessPdf.url;
+    result = await PdfStringify.getPdfBase64(url);
+    res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send(result);
   }
   catch (e) {
     console.log(e);

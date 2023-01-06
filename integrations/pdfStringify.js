@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function getPdfBase64(pdfUrl) {
-    var result = { "status": 200, "data": null }
+    let result = { "status": 200, "data": null }
     await axios({
         method: 'get',
         url: pdfUrl,

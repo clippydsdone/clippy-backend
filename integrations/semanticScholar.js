@@ -4,7 +4,7 @@ const baseURLSemantic = 'https://api.semanticscholar.org';
 
 async function searchPaperById(paperId, fields = "paperId,externalIds,url,title,abstract,venue,year,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,publicationTypes,publicationDate,journal,citationStyles,authors,tldr,references") {
     const getReq = baseURLSemantic + '/graph/v1/paper/' + paperId;
-    var result = { "status": 200, "data": null, "fields": fields }
+    let result = { "status": 200, "data": null, "fields": fields }
     await axios({
         method: 'get',
         url: getReq,
@@ -15,14 +15,14 @@ async function searchPaperById(paperId, fields = "paperId,externalIds,url,title,
         .catch((err) => {
             result.status = err.response.status;
             result.data = err.message;
-    });
+        });
     return result;
 };
 exports.searchPaperById = searchPaperById
 
-async function searchPaperIdByKeywoard(query, fields ="title,paperId") {
+async function searchPaperIdByKeywoard(query, fields = "title,paperId") {
     const getReq = baseURLSemantic + '/graph/v1/paper/search/';
-    var result = { "status": 200, "data": null }
+    let result = { "status": 200, "data": null }
     await axios({
         method: 'get',
         params: { "query": query, "fields": fields },

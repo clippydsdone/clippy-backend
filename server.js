@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -18,7 +17,7 @@ app.use(
   })
 );
 
-app.use(function (req, res, next) {
+app.use(function (_, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
@@ -26,7 +25,7 @@ app.use(function (req, res, next) {
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.send('Hello, Clippy!');
 });
 
 app.get('/semantic/paper/id/:id', async (req, res) => {
@@ -51,8 +50,8 @@ app.post('/semantic/paper/base64', async (req, res) => {
     const paperId = response.data[0].paperId;
     let result = await SemanticScholarApi.searchPaperById(paperId);
 
-    if (result.data.isOpenAccess == false) {
-      throw "PDF document is not publicly available."
+    if (!result.data.isOpenAccess) {
+      throw new Error("PDF document is not publicly available.")
     }
 
     const url = result.data.openAccessPdf.url;
@@ -73,8 +72,8 @@ app.get('/semantic/paper/base64/id/:id', async (req, res) => {
     const paperId = req.params.id;
     let result = await SemanticScholarApi.searchPaperById(paperId);
     
-    if (result.data.isOpenAccess == false) {
-      throw "PDF document is not publicly available."
+    if (!result.data.isOpenAccess) {
+      throw new Error("PDF document is not publicly available.")
     }
 
     const url = result.data.openAccessPdf.url;
@@ -109,12 +108,12 @@ app.post('/semantic/paper/search', async (req, res) => {
 
 app.post('/semantic/paper/search_multiple', async (req, res) => {
   try {
-    var query = req.body.query;
-    var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+    let query = req.body.query;
+    let response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
 
-    var results = [];
-    for (var i = 0; i < response.data.length; i++) {
-      var curr = await SemanticScholarApi.searchPaperById(response.data[i].paperId);
+    let results = [];
+    for (const element of response.data) {
+      let curr = await SemanticScholarApi.searchPaperById(element.paperId);
       results.push(curr);
     }
     results.data = results;

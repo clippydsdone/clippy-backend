@@ -68,7 +68,7 @@ app.post('/semantic/paper/base64', async (req, res) => {
   }
 });
 
-app.post('/semantic/paper/base64/id/:id', async (req, res) => {
+app.get('/semantic/paper/base64/id/:id', async (req, res) => {
   try {
     const paperId = req.params.id;
     let result = await SemanticScholarApi.searchPaperById(paperId);

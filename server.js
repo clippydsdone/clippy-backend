@@ -68,6 +68,28 @@ app.post('/semantic/paper/base64', async (req, res) => {
   }
 });
 
+app.post('/semantic/paper/base64/id/:id', async (req, res) => {
+  try {
+    const paperId = req.params.id;
+    let result = await SemanticScholarApi.searchPaperById(paperId);
+    
+    if (result.data.isOpenAccess == false) {
+      throw "PDF document is not publicly available."
+    }
+
+    const url = result.data.openAccessPdf.url;
+    result = await PdfStringify.getPdfBase64(url);
+    res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send(result);
+  }
+  catch (e) {
+    console.log(e);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send({ "err": e }, 404);
+  }
+});
+
 app.post('/semantic/paper/search', async (req, res) => {
   try {
     const query = req.body.query;

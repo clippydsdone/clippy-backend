@@ -5,7 +5,9 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 
 const SemanticScholarApi = require('./integrations/semanticScholar.js');
+const PdfStringify = require('./integrations/pdfStringify.js');
 const D3proxy = require('./proxy/d3proxy.js');
+
 
 app.use(express.json());
 
@@ -23,7 +25,7 @@ app.use(function (req, res, next) {
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.send('Hello, Clippy!');
 });
 
 app.get('/semantic/paper/id/:id', async (req, res) => {
@@ -36,6 +38,52 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
     res.send(result.data);
   }
   catch (e) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send({ "err": e }, 404);
+  }
+});
+
+app.post('/semantic/paper/base64', async (req, res) => {
+  try {
+    const query = req.body.query;
+    const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+    const paperId = response.data[0].paperId;
+    let result = await SemanticScholarApi.searchPaperById(paperId);
+
+    if (!result.data.isOpenAccess) {
+      throw new Error("PDF document is not publicly available.")
+    }
+
+    const url = result.data.openAccessPdf.url;
+    result = await PdfStringify.getPdfBase64(url);
+    res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send(result);
+  }
+  catch (e) {
+    console.log(e);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send({ "err": e }, 404);
+  }
+});
+
+app.get('/semantic/paper/base64/id/:id', async (req, res) => {
+  try {
+    const paperId = req.params.id;
+    let result = await SemanticScholarApi.searchPaperById(paperId);
+    
+    if (!result.data.isOpenAccess) {
+      throw new Error("PDF document is not publicly available.")
+    }
+
+    const url = result.data.openAccessPdf.url;
+    result = await PdfStringify.getPdfBase64(url);
+    res.status(result.status);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send(result);
+  }
+  catch (e) {
+    console.log(e);
     res.header("Access-Control-Allow-Origin", "*");
     res.send({ "err": e }, 404);
   }
@@ -60,12 +108,12 @@ app.post('/semantic/paper/search', async (req, res) => {
 
 app.post('/semantic/paper/search_multiple', async (req, res) => {
   try {
-    var query = req.body.query;
-    var response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
+    let query = req.body.query;
+    let response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
 
-    var results = [];
-    for (var i = 0; i < response.data.length; i++) {
-      var curr = await SemanticScholarApi.searchPaperById(response.data[i].paperId);
+    let results = [];
+    for (const element of response.data) {
+      let curr = await SemanticScholarApi.searchPaperById(element.paperId);
       results.push(curr);
     }
     results.data = results;
@@ -77,3 +125,5 @@ app.post('/semantic/paper/search_multiple', async (req, res) => {
     res.send({ "err": e }, 404);
   }
 });
+
+

@@ -38,4 +38,26 @@ async function searchPaperIdByKeywoard(query, fields = "title,paperId") {
         });
     return result;
 };
+
 exports.searchPaperIdByKeywoard = searchPaperIdByKeywoard
+
+async function getPaperReferences(paperId, fields = "paperId,corpusId,externalIds,url,title,abstract,venue,year,publicationVenue,referenceCount,citationCount,influentialCitationCount,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,publicationTypes,publicationDate,journal,citationStyles,authors") {
+    const getReq = baseURLSemantic + '/graph/v1/paper/' + paperId + '/references';
+    let result = { "status": 200, "data": null };
+    await axios({
+        method: 'get',
+        params: { "fields": fields },
+        headers: { 'x-api-key': process.env.SEMANTIC_SCHOLAR_API_KEY },
+        url: getReq
+    })
+        .then((response) => {;
+            result.data = response.data.data
+        })
+        .catch((err) => {
+            result.status = err.response.status;
+            result.data = err.message;
+        });
+    return result;
+};
+
+exports.getPaperReferences = getPaperReferences

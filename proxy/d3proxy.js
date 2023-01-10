@@ -14,23 +14,22 @@ async function parseReferencesToD3Json(paper) {
         if (id == undefined) {
             continue;
         }
-        ret.links.push({ "source": paperId, "target": id, "group": 2, "distance": 50 })
+        ret.links.push({ "source": paperId, "target": id, "group": 2, "distance": 50 });
+        ret.nodes.push({ "id": id, "group": 2, "data": element.title });
         nodeIds.push(id);
     }
 
     let dataRef = await SemanticScholarApi.getPaperReferences(paperId);
     for (const element of dataRef.data) {
-        let id = element.citedPaper.paperId;
-        if (id == undefined) {
+        let currId = element.citingPaper.paperId;
+        if (currId == undefined) {
             continue;
         }
 
-        if (nodeIds.includes(id)) {
-            ret.nodes.push({ "id": id, "group": 2, "data": element.citedPaper.title });
-            ret.links.push({ "source": paperId, "target": id, "group": 2, "distance": 25 });
+        if (nodeIds.includes(currId)) {
+            ret.links.push({ "source": currId, "target": paperId, "group": 2, "distance": 25 });
         }
     }
-    console.log(ret);
     return ret;
 }
 

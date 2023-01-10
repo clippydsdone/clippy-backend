@@ -96,7 +96,6 @@ app.post('/semantic/paper/search', async (req, res) => {
     const paperId = response.data[0].paperId;
     const result = await SemanticScholarApi.searchPaperById(paperId);
     result.data.references = await D3proxy.parseReferencesToD3Json(result);
-    res.status(result.status);
     res.header("Access-Control-Allow-Origin", "*");
     res.send(result.data);
   }

@@ -4,7 +4,7 @@ async function parseReferencesToD3Json(paper) {
     const paperId = paper.data.paperId;
     let nodeIds = [];
     let ret = {
-        "nodes": [{ "id": paperId, "group": 1, "data": paper.data.title }],
+        "nodes": [{ "id": paperId, "group": 1, "title": paper.data.title }],
         "links": []
     }
     nodeIds.push(paperId);
@@ -15,7 +15,7 @@ async function parseReferencesToD3Json(paper) {
             continue;
         }
         ret.links.push({ "source": paperId, "target": id, "group": 2, "distance": 50 });
-        ret.nodes.push({ "id": id, "group": 2, "data": element.title });
+        ret.nodes.push({ "id": id, "group": 2, "title": element.title });
         nodeIds.push(id);
     }
 

@@ -6,14 +6,14 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 ## Contents
 
  - [Application](#application)
- -- [Tools](#tools)
- -- [Services](#services)
+	 - [Tools](#tools)
+	 - [Services](#services)
  - [Development](#development)
- -- [Branching](#branching)
+	 - [Branching](#branching)
  - [Hosting](#hosting)
- -- [Heroku](#heroku)
- -- [Environments](#environments)
- -- [Variables](#variables)
+	 - [Heroku](#heroku)
+	 - [Environments](#environments)
+	 - [Variables](#variables)
 
 
 ## [Application](#development)

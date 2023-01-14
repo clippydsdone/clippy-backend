@@ -29,7 +29,7 @@ app.get('/semantic/paper/id/:id', async (req, res) => {
   try {
     const paperId = req.params.id;
     const result = await SemanticScholarApi.searchPaperById(paperId);
-    result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
+    result.data.references = await D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
 
     res.header("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGINS);
     res.status(result.status);
@@ -91,12 +91,13 @@ app.post('/semantic/paper/search', async (req, res) => {
     const response = await SemanticScholarApi.searchPaperIdByKeywoard(query);
     const paperId = response.data[0].paperId;
     const result = await SemanticScholarApi.searchPaperById(paperId);
-    result.data.references = D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
+    result.data.references = await D3proxy.parseReferencesToD3Json(result.data.paperId, result.data.title, result.data.references);
     res.header("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGINS);
     res.status(result.status);
     res.send(result.data);
   }
   catch (e) {
+    console.log(e);
     res.header("Access-Control-Allow-Origin", process.env.ALLOWED_ORIGINS);
     res.send({ "err": e }, 404);
   }

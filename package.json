@@ -1,6 +1,6 @@
 {
   "name": "clippy-backend",
-  "version": "0.0.2",
+  "version": "1.1.0",
   "description": "Backend for DSD project Clippy.",
   "main": "server.js",
   "scripts": {

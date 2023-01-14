@@ -6,18 +6,19 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 ## Contents
 
  - [Application](#application)
- --  [Tools & Platforms](#tools-and-platforms)
- -- [External Services (APIs)](#external-services)
+ -- [Tools](#tools)
+ -- [Services](#services)
  - [Development](#development)
- -- [Branching Strategy](#branching)
+ -- [Branching](#branching)
  - [Hosting](#hosting)
+ -- [Heroku](#heroku)
  -- [Environments](#environments)
- -- [Environment Variables](#environment-variables)
+ -- [Variables](#variables)
 
 
 ## [Application](#development)
 
-### [Tools & Platforms](#tools-and-platforms)
+### [Tools](#tools)
 
 - Git for version control.
 - [Zenhub](https://app.zenhub.com/workspaces/clippy-63600767a63c240a624ccea7/board) in addition to GitHub board for tracking work items and SCRUM organisation.
@@ -25,12 +26,12 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 - [NodeJS](https://nodejs.org/en/) is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 - [Axios](https://axios-http.com/docs/intro) a promise-based HTTP Client for node.js and the browser.
 
-### [External Services (APIs)](#external-services)
+### [Services](#services)
 - [Semantic Scholar](https://www.semanticscholar.org/about) provide records for research papers published in all fields provided as an easy-to-use JSON archive.
 - [Hugging Face]() a community and data science platform that provides: tools that enable users to build, train and deploy ML (Machine Learning) models based on open source (OS) code and technologies, as well as a place where a broad community of data scientists, researchers, and ML engineers can come together and share ideas, get support and contribute to open source projects.
 
 ## [Development](#development)
-### [Branching Strategy](#branching)
+### [Branching](#branching)
 
 There are only 2 long-standing (remote) branches:   
 
@@ -52,7 +53,7 @@ When issues are closed temporary branches are **squashed and deleted**.
       R --> M[main];
 ```
 ## [Hosting](#hosting)
-### Heroku
+### [Heroku](#heroku)
 Clippy respository is setup for hosting to [Heroku](https://dashboard.heroku.com) with heroku/nodejs buildpack. 
 ### [Environments](#environments)
 There are two Clippy hosting environments: 
@@ -60,7 +61,7 @@ There are two Clippy hosting environments:
  - Development: Environment that is hosted from the dev branch and PRs.
  - Production: Environment that is hosted from the main branch (release).
 
-### [Environment Variables](#environment-variables)
+### [Variables](#variables)
 All environment variables needed for hosting Clippy are defined in GitHub secrets.
 | Keys | Description |
 |--|--|

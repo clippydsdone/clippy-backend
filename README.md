@@ -10,7 +10,6 @@ This is repository contains code for backend of project [Clippy: smart PDF reade
 - [SonarCloud](https://sonarcloud.io/project/overview?id=clippydsdone_clippy-backend) for code quality check.
 - [NodeJS](https://nodejs.org/en/) is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 - [Axios](https://axios-http.com/docs/intro) a promise-based HTTP Client for node.js and the browser.
-- [Neo4J](https://neo4j.com/developer/graph-database/) is an open-source, NoSQL, native graph database that provides an ACID-compliant transactional backend for your applications.
 
 ## External Services (APIs)
 - [Semantic Scholar](https://www.semanticscholar.org/about) provide records for research papers published in all fields provided as an easy-to-use JSON archive.
@@ -37,5 +36,3 @@ When issues are closed temporary branches are **squashed and deleted**.
       C[bugfix/*] --> R[dev];
       R --> M[main];
 ```
-
-## GitFlow

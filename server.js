@@ -8,6 +8,7 @@ const SemanticScholarApi = require('./integrations/semanticScholar.js');
 const PdfStringify = require('./integrations/pdfStringify.js');
 const D3proxy = require('./proxy/d3proxy.js');
 
+console.log(process.env.ALLOWED_ORIGINS);
 
 app.use(express.json());
 app.use(cors({

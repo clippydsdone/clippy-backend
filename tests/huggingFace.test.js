@@ -1,48 +1,49 @@
-const SemanticScholarApi = require('../integrations/semanticScholar.js');
+const axios = require('axios');
 
 jest.setTimeout(30 * 1000);
 
-describe('Semantic Scholar API testing', () => {
-    test('TB01 - Semantic Scholar By ID: Paper is null', async () => {
-        const result = await SemanticScholarApi.searchPaperById(null);
-        expect(result.status).toBe(404);
-        expect.stringContaining("Request failed");
+const text = `The tower is 324 metres (1,063 ft) tall, about the same height as an 81-storey building, and the tallest structure in Paris. Its base is square, measuring 125 metres (410 ft) on each side. During its construction, the Eiffel Tower surpassed the Washington Monument to become the tallest man-made structure in the world, a title it held for 41 years until the Chrysler Building in New York City was finished in 1930. It was the first structure to reach a height of 300 metres. Due to the addition of a broadcasting aerial at the top of the tower in 1957, it is now taller than the Chrysler Building by 5.2 metres (17 ft). Excluding transmitters, the Eiffel Tower is the second tallest free-standing structure in France after the Millau Viaduct.`
+
+describe('Hugging face API testing', () => {
+    test('TB08 - Get summary from Hugging face without API key', async () => {
+        await axios({
+            method: 'post',
+            url: "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+            body: { 'inputs': text }
+        })
+            .then((response) => {
+                expect(response.status).toBe(200);
+                expect.stringContaining("summary_text");
+            })
+            .catch((err) => expect(err.response.status).toBe(429)
+            );
     });
 
-    test('TB02 - Semantic Scholar By ID: Selected paper', async () => {
-        const result = await SemanticScholarApi.searchPaperById("204e3073870fae3d05bcbc2f6a8e263d9b72e776");
-        expect(result.status).toBe(200);
-        expect(result.data.title).toBe("Attention is All you Need");
+    test('TB09 - Get summary from Hugging face with invalid API key', async () => {
+        await axios({
+            method: 'post',
+            url: "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+            headers: { Authorization: "invalid key" },
+            body: { 'inputs': text }
+        })
+            .then((response) => {
+            })
+            .catch((err) => {
+                expect.stringContaining("invalid");
+                expect(err.response.status).toBe(400);
+            });
     });
 
-    test('TB03 - Semantic Scholar By ID: Selected paper field missing', async () => {
-        const result = await SemanticScholarApi.searchPaperById("204e3073870fae3d05bcbc2f6a8e263d9b72e776", "paperId");
-        expect(result.status).toBe(200);
-        expect(result.data.title).not.toBe("Attention is All you Need");
-    });
-
-    test('TB04 - Semantic Scholar By ID: Selected paper additional field', async () => {
-        const result = await SemanticScholarApi.searchPaperById("204e3073870fae3d05bcbc2f6a8e263d9b72e776", "paperId,title,year");
-        expect(result.status).toBe(200);
-        expect(result.data.title).toBe("Attention is All you Need");
-        expect(result.data.year).toBe(2017);
-    });
-
-    test('TB05 - Semantic Scholar Serach: Serach paper title null', async () => {
-        const result = await SemanticScholarApi.searchPaperIdByKeywoard(null);
-        expect(result.status).toBe(400);
-        expect.stringContaining("Request failed");
-    });
-
-    test('TB06 - Semantic Scholar Serach: Serach paper by keywoard', async () => {
-        const result = await SemanticScholarApi.searchPaperIdByKeywoard("Attention is All you Need");
-        expect(result.status).toBe(200);
-        expect(result.data[0].title).toBe("Attention is All you Need");
-    });
-
-    test('TB07 - Semantic Scholar search query by title', async () => {
-        const result = await SemanticScholarApi.searchPaperIdByKeywoard("Attention is All you Need");
-        expect(result.status).toBe(200);
-        expect(result.data[0].title).toBe("Attention is All you Need");
+    test('TB10 - Get summary from Hugging face invalid input', async () => {
+        await axios({
+            method: 'post',
+            url: "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
+                })
+            .then((response) => {
+                expect.stringContaining("summary_text");
+            })
+            .catch((err) => {
+                expect(err.response.status).toBe(429);
+            });
     });
 });

@@ -11,9 +11,9 @@ concurrency:
   group: ${{ github.head_ref || github.ref_name }} 
   cancel-in-progress: true
 jobs:
-  build:
-    name: Running Tests
-    runs-on: ubuntu-latest  
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 14.x
@@ -22,13 +22,7 @@ jobs:
           node-version: 14.x
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run tests
-
-  sonarcloud:
-    needs: build
-    name: SonarCloud Analysis
-    runs-on: ubuntu-latest
-    steps:
+      - run: npm run tests --coverage --testResultsProcessor=jest-sonar-reporter
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -38,6 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+          ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
   deploy:
     needs: sonarcloud
     name: Heroku Deployement

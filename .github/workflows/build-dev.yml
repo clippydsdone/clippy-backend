@@ -22,7 +22,7 @@ jobs:
           node-version: 14.x
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run tests -- --coverage --testResultsProcessor=jest-sonar-reporter
+      - run: npm run tests --coverage --testResultsProcessor=jest-sonar-reporter
       - run: npm run coverage
       - uses: actions/checkout@v2
         with:
